@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pyruicore"
+version = "0.1.0"
+description = "load python dict data to python class"
+authors = ["ruicore <hrui835@gmail.com>"]
+license = "MIT"
+homepage = "https://github.com/RuiCoreSci/pyruicore"
+repository = "https://github.com/RuiCoreSci/pyruicore"
+
+packages = [
+    { include = "pyruicore" }
+]
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
