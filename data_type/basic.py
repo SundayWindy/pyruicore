@@ -10,10 +10,10 @@ class BaseType:
     def mock(self) -> Any:
         raise NotImplementedError()
 
-    def parse(self, value) -> Any:
+    def parse(self, field, value) -> Any:
         raise NotImplementedError()
 
-    def validate(self, value) -> None:
+    def validate(self, value) -> Any:
         raise NotImplementedError()
 
     def marshal(self, value) -> Any:
@@ -30,8 +30,14 @@ class IntType(BaseType):
     def mock(self) -> int:
         return randint(0, 10)
 
-    def parse(self, value) -> Optional[int]:
-        return int(value) if value not in (None, "") else None
+    def parse(self, field, value) -> Optional[int]:
+        try:
+            return int(value) if value not in (None, "") else None
+        except TypeError:
+            raise TypeError(f"{field} expect <class 'int'>, but get {type(value)}")
+
+    def marshal(self, value) -> Optional[int]:
+        return int(value) if value else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -39,15 +45,20 @@ class IntType(BaseType):
         ), f"expect <class 'int'>, but get {type(value)}"
 
     __name__ = "int"
-    marshal = parse
 
 
 class FloatType(BaseType):
     def mock(self) -> float:
         return int(random() * 100) / 10
 
-    def parse(self, value) -> None:
-        return float(value) if value not in (None, "") else None
+    def parse(self, field, value) -> float:
+        try:
+            return float(value) if value not in (None, "") else None
+        except TypeError:
+            raise TypeError(f"{field} expect <class 'float'>, but get {type(value)}")
+
+    def marshal(self, value) -> Optional[float]:
+        return float(value) if value else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -55,15 +66,20 @@ class FloatType(BaseType):
         ), f"expect <class 'float'>, but get {type(value)}"
 
     __name__ = "float"
-    marshal = parse
 
 
 class StringType(BaseType):
     def mock(self) -> str:
         return str(random() * 100 / 10)
 
-    def parse(self, value) -> None:
-        return str(value) if value not in (None, "") else None
+    def parse(self, field, value) -> Optional[str]:
+        try:
+            return str(value) if value not in (None, "") else None
+        except TypeError:
+            raise TypeError(f"{field} expect <class 'str'>, but get {type(value)}")
+
+    def marshal(self, value) -> Optional[str]:
+        return str(value) if value else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -71,14 +87,13 @@ class StringType(BaseType):
         ), f"expect <class 'str'>, but get {type(value)}"
 
     __name__ = "str"
-    marshal = parse
 
 
 class BooleanType(BaseType):
     def mock(self) -> bool:
         return choice([True, False])
 
-    def parse(self, value) -> bool:
+    def parse(self, field, value) -> bool:
         return True if value else False
 
     def validate(self, value) -> None:
@@ -86,22 +101,26 @@ class BooleanType(BaseType):
             value, bool
         ), f"expect <class 'bool'>, but get {type(value)}"
 
+    def marshal(self, value):
+        return True if value else False
+
     __name__ = "bool"
-    marshal = parse
 
 
 class DateTimeType(BaseType):
     def mock(self) -> datetime:
         return datetime.fromtimestamp(1000000000 * random())
 
-    def parse(self, value) -> datetime:
+    def parse(self, field, value) -> datetime:
         if value and value not in {"", "null", "None"}:
             if isinstance(value, datetime):
                 return value
             elif isinstance(value, str):
                 return str_to_datetime(value)
 
-        raise ValueError("Invalid datetime type")
+        raise ValueError(
+            f"{field} expect datetime, but get{value},Invalid datetime type"
+        )
 
     def marshal(self, value):
         if isinstance(value, datetime):
@@ -126,8 +145,13 @@ class ListType(BaseType):
     def mock(self) -> List[Any]:
         return [self.element_type.mock() for _ in range(10)]
 
-    def parse(self, value) -> List[Any]:
-        return [] if not value else [self.element_type.parse(v) for v in value]
+    def parse(self, field, value) -> List[Any]:
+        try:
+            return (
+                [] if not value else [self.element_type.parse(field, v) for v in value]
+            )
+        except TypeError as e:
+            raise e
 
     def validate(self, value) -> None:
         assert isinstance(value, Iterable) and not isinstance(
@@ -135,7 +159,7 @@ class ListType(BaseType):
         ), f"expect <Iterable> and not <class 'str'>, but get {type(value)}"
         [self.element_type.validate(v) for v in value]  # 基本类型
 
-    def marshal(self, value):
+    def marshal(self, value) -> List[Any]:
         return [self.element_type.marshal(v) for v in value]
 
     def __str__(self):

@@ -11,7 +11,7 @@ class UserDefineType(BaseType):
     def mock(self):
         raise NotImplementedError()
 
-    def parse(self, value: Union[Dict[str, Any]]) -> Any:
+    def parse(self, field, value: Union[Dict[str, Any]]) -> Any:
         from data_class.model.base import BaseModel
 
         if isinstance(value, BaseModel):
@@ -19,7 +19,9 @@ class UserDefineType(BaseType):
         elif isinstance(value, dict):
             return self.class_type(**value)
         else:
-            raise Exception("实例化失败")
+            raise TypeError(
+                f"<{field}> expect: <class '{self.class_name}'>, but get: {type(value)}"
+            ) from None
             # todo: raise exception ?
 
     def validate(self, value: Any) -> None:

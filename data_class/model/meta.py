@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Set
 
 from data_class.field import Field
 from data_type import TYPE_MAPPING, ListType, UserDefineType, analysis_annotation
@@ -21,7 +21,10 @@ class ModelMetaClass(type):
 
         attrs["__fields__"] = tuple(__fields_map__.values())
         attrs["__fields_map__"] = __fields_map__
-        attrs["__slots__"] = tuple(list(__fields_map__.keys()) + ["__storage__"])
+        slots: Set[str] = attrs.get("__slots__", ())
+        attrs["__slots__"] = tuple(
+            list(__fields_map__.keys()) + ["__storage__"] + list(slots)
+        )
 
         return type.__new__(mcs, cls_name, bases, attrs)
 

@@ -22,7 +22,7 @@ def parse_union(args):
 
     if len(types_) == 1:
         real_type = types_[0]
-        if not is_origin_type(real_type):
+        if get_args(real_type):
             _, real_type, ele_type = analysis_annotation(real_type)
             return nullable, real_type, ele_type
         else:
@@ -44,8 +44,8 @@ def analysis_annotation(type_hint: Any) -> Tuple[bool, Any, Any]:
     根据 typing 获取真实的类型
     返回是否可空，以及真实的类型
     """
-    if is_origin_type(type_hint):
-        return False, type_hint, None  # 原始类型
+    if is_origin_type(type_hint) and not get_args(type_hint):
+        return False, type_hint, None  # 原始单一类型
 
     if type_hint is Callable:  # func
         raise Exception(f"不支持 {Callable} 类型") from None

@@ -29,15 +29,15 @@ class Field:
         implicit: bool = True,
         default: Any = None,
         default_factory: Callable = None,
+        **kwargs,
     ):
         self.field_type = field_type
         self.mock_func = mock_func
         self.enum_values = enum_values
         self.comment = comment
         self.nullable = nullable
-        self.validate = validate or self.field_type.validate
+        self.validate = validate
         self.implicit = implicit
-        self.name = self.field_type.__name__
         self.default = default
         self.default_factory = default_factory
 
@@ -51,11 +51,11 @@ class Field:
                 return None
         return value
 
-    def parse(self, value):
+    def parse(self, field, value):
         value = self._get_value(value)
         if not self.implicit:
             self.validate(value)
-        return self.field_type.parse(value)
+        return self.field_type.parse(field, value)
 
     def __str__(self):
         return f"<Field [{self.name}]: {self.field_type}>"
