@@ -1,4 +1,4 @@
-from collections import Iterable
+from collections.abc import Iterable
 from datetime import datetime
 from random import choice, randint, random
 from typing import Any, List, Optional, Union
