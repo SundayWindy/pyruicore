@@ -7,7 +7,9 @@
 ## Usage
 
 ```py
-from pyruicore import Field, BaseModel
+
+
+from pyruicore import BaseModel, Field
 
 
 class Department(BaseModel):
@@ -20,8 +22,22 @@ class User(BaseModel):
     departs: List[Department]
 
 
-user = User(departs=[{"name": "de1", "address": "address1"}, Department(name="2", address="address2")])
-user_dict = user.dict()  # is equal to {'age': 1, 'departs': [{'name': 'de1', 'address': 'address1'}, {'name': '2', 'address': 'address2'}]}
+user = User(
+    departs=[
+        {"name": "de1", "address": "address1"},
+        Department(name="2", address="address2"),
+    ]
+)
+user_dict = user.dict()
+"""
+user_dict = {
+    "age": 1,
+    "departs": [
+        {"name": "de1", "address": "address1"},
+        {"name": "2", "address": "address2"},
+    ]
+}
+"""
 
 ```
 
