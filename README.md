@@ -6,6 +6,8 @@
 
 ## Usage
 
+* pip install pyruicore -i https://pypi.org/simple
+
 ```py
 
 
