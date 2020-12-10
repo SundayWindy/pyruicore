@@ -1,6 +1,6 @@
 from typing import Any, Dict, Union
 
-from data_type.basic import BaseType
+from pyruicore.data_type import BaseType
 
 
 class UserDefineType(BaseType):
@@ -12,7 +12,7 @@ class UserDefineType(BaseType):
         raise NotImplementedError()
 
     def parse(self, field, value: Union[Dict[str, Any]]) -> Any:
-        from data_class.model.base import BaseModel
+        from pyruicore.model.base import BaseModel
 
         if isinstance(value, BaseModel):
             return value

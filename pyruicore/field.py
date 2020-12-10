@@ -1,11 +1,10 @@
 from typing import Any, Callable
 
-from data_type import BaseType
+from pyruicore.data_type import BaseType
 
 
 class Field:
     __slots__ = (
-        "name",
         "field_type",
         "mock_func",
         "enum_values",
@@ -15,7 +14,6 @@ class Field:
         "implicit",
         "default",
         "default_factory",
-        "sub_fields",
     )
 
     def __init__(
@@ -41,7 +39,7 @@ class Field:
         self.default = default
         self.default_factory = default_factory
 
-    def _get_value(self, value):
+    def get_value(self, value):
         if value is None:
             if self.default_factory is not None:
                 value = self.default_factory()
@@ -52,13 +50,11 @@ class Field:
         return value
 
     def parse(self, field, value):
-        value = self._get_value(value)
         if not self.implicit:
-            self.validate(value)
+            self.field_type.validate(value)
         return self.field_type.parse(field, value)
 
     def __str__(self):
-        return f"<Field [{self.name}]: {self.field_type}>"
+        return f"<Field of type : {self.field_type or 'unknown yet'}>"
 
-    def __repr__(self):
-        return self.field_type.__name__
+    __repr__ = __str__

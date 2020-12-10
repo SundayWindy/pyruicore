@@ -3,7 +3,7 @@ from datetime import datetime
 from random import choice, randint, random
 from typing import Any, List, Optional, Union
 
-from data_type.util import str_to_datetime
+from pyruicore.data_type.util import str_to_datetime
 
 
 class BaseType:

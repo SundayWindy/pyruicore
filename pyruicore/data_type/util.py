@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from data_type.const import DATE_FORMATS
+from pyruicore.data_type.const import DATE_FORMATS
 
 
 def str_to_datetime(value):

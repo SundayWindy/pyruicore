@@ -1,7 +1,10 @@
+"""
+all basic type
+"""
 from datetime import datetime
 
-from data_type.analysis import analysis_annotation
-from data_type.basic import (
+from pyruicore.data_type.analysis import analysis_annotation
+from pyruicore.data_type.basic import (
     BaseType,
     BooleanType,
     DateTimeType,
@@ -10,7 +13,7 @@ from data_type.basic import (
     ListType,
     StringType,
 )
-from data_type.udf import UserDefineType
+from pyruicore.data_type.udf import UserDefineType
 
 TYPE_MAPPING = {
     int: IntType,

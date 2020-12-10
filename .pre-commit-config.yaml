@@ -16,7 +16,6 @@ repos:
       - id: check-docstring-first
       - id: check-json
       - id: check-merge-conflict
-      - id: check-toml
       - id: check-yaml
       - id: double-quote-string-fixer
       - id: end-of-file-fixer
@@ -33,19 +32,7 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 5.1.1
-    hooks:
-      - id: pydocstyle
-
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.8.4
     hooks:
       - id: flake8
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.6.2
-    hooks:
-      - id: bandit
-        args: [ -f, custom, -q ]
-        exclude: tests/

@@ -1,8 +1,8 @@
 import pprint
 from typing import Any, Dict
 
-from data_class.field import Field
-from data_class.model.meta import ModelMetaClass
+from pyruicore.field import Field
+from pyruicore.model.meta import ModelMetaClass
 
 
 class BaseModel(metaclass=ModelMetaClass):
@@ -12,7 +12,8 @@ class BaseModel(metaclass=ModelMetaClass):
     def __init__(self, drop_missing=False, **kwargs):
         class_name = type(self).__name__
         for field_name, field in self.__fields_map__.items():
-            value = kwargs.get(field_name)
+            input_value = kwargs.get(field_name)
+            value = field.get_value(input_value)
             if not drop_missing and not field.nullable and not value:
                 raise Exception(
                     f"{type(self)}: field <{field_name}> must be initialized"
