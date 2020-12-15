@@ -166,3 +166,23 @@ class ListType(BaseType):
         return f"List of <{self.element_type.__name__}>"
 
     __name__ = "list"
+
+
+class AnyType(BaseType):
+    def mock(self) -> None:
+        return None
+
+    def parse(self, field, value) -> List[Any]:
+        return value
+
+    def validate(self, value) -> Any:
+        return value
+
+    def marshal(self, value) -> None:
+        try:
+            return value.dict()
+        except AttributeError:
+            return value
+
+    def __str__(self):
+        return "AnyType"

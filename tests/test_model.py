@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional, Text
+from typing import Any, List, Optional, Text
 
 from pyruicore import BaseModel, Field
 
@@ -100,4 +100,17 @@ def test_default_factory():
 
     user = User(name="name")
     expect = {"age": 1, "name": "name"}
+    assert user.dict() == expect
+
+
+def test_any_type():
+    class Dept(BaseModel):
+        name: str = Field(default_factory=lambda: "dept")
+
+    class User(BaseModel):
+        age: int = Field(default_factory=lambda: 1)
+        dept: Any = Field(default_factory=lambda: Dept())
+
+    user = User()
+    expect = {"age": 1, "dept": {"name": "dept"}}
     assert user.dict() == expect
