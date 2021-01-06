@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "pyruicore"
-version = "0.1.0"
+version = "0.0.1"
 description = "load python dict data to python class"
 authors = ["ruicore <hrui835@gmail.com>"]
 license = "MIT"
 homepage = "https://github.com/RuiCoreSci/pyruicore"
 repository = "https://github.com/RuiCoreSci/pyruicore"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
