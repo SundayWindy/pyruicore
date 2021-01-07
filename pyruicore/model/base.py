@@ -15,9 +15,7 @@ class BaseModel(metaclass=ModelMetaClass):
             input_value = kwargs.get(field_name)
             value = field.get_value(input_value)
             if not drop_missing and not field.nullable and not value:
-                raise Exception(
-                    f"{type(self)}: field <{field_name}> must be initialized"
-                )
+                raise Exception(f"{type(self)}: field <{field_name}> must be initialized")
             setattr(self, field_name, field.parse(f"{class_name}.{field_name}", value))
 
     def dict(self, exclude_none=False, exclude_unset=False, exclude=None):

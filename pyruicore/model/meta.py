@@ -1,11 +1,6 @@
 from typing import Any, List
 
-from pyruicore.data_type import (
-    TYPE_MAPPING,
-    ListType,
-    UserDefineType,
-    analysis_annotation,
-)
+from pyruicore.data_type import TYPE_MAPPING, ListType, UserDefineType, analysis_annotation
 from pyruicore.field import Field
 
 
@@ -19,9 +14,7 @@ class ModelMetaClass(type):
         attrs["__fields__"] = tuple(__fields_map__.values())
         attrs["__fields_map__"] = __fields_map__
         attrs["__slots__"] = (
-            tuple(attrs.get("__slots__", ()))
-            + tuple(__fields_map__.keys())
-            + ("__storage__",)
+            tuple(attrs.get("__slots__", ())) + tuple(__fields_map__.keys()) + ("__storage__",)
         )
 
         return type.__new__(mcs, cls_name, bases, attrs)
@@ -41,15 +34,15 @@ def init_annotations(__fields_map__, attrs):
         if is_reserve_word(field_name):
             continue
         user_ini_field = attrs.pop(field_name, None)  # user init Field
-        __fields_map__[field_name] = init_field(user_ini_field, anno_type)
+        __fields_map__[field_name] = init_field(user_ini_field, anno_type, field_name)
 
 
-def init_field(user_ini_field: Field, anno_type: [int, str, float, List, Any]):
+def init_field(user_ini_field: Field, anno_type: [int, str, float, List, Any], field_name: str):
     nullable, user_field_type, user_ele_type = parse_annotation(anno_type)
     field_type = init_field_type(user_field_type, user_ele_type)
 
     field = parse_ugv_field(user_ini_field) or Field()
-    field.nullable, field.field_type = nullable, field_type
+    field.nullable, field.field_type, field.name = nullable, field_type, field_name
     return field
 
 

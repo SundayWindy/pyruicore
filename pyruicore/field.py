@@ -5,6 +5,7 @@ from pyruicore.data_type import BaseType
 
 class Field:
     __slots__ = (
+        "name",
         "field_type",
         "mock_func",
         "enum_values",
@@ -14,10 +15,12 @@ class Field:
         "implicit",
         "default",
         "default_factory",
+        "others",
     )
 
     def __init__(
         self,
+        name: str = "",
         field_type: BaseType = None,
         mock_func: Callable = None,
         enum_values: tuple = (),
@@ -29,6 +32,7 @@ class Field:
         default_factory: Callable = None,
         **kwargs,
     ):
+        self.name = name
         self.field_type = field_type
         self.mock_func = mock_func
         self.enum_values = enum_values
@@ -38,8 +42,9 @@ class Field:
         self.implicit = implicit
         self.default = default
         self.default_factory = default_factory
+        self.others = kwargs
 
-    def get_value(self, value):
+    def get_value(self, value=None):
         if value is None:
             if self.default_factory is not None:
                 value = self.default_factory()
@@ -55,6 +60,6 @@ class Field:
         return self.field_type.parse(field, value)
 
     def __str__(self):
-        return f"<Field of type : {self.field_type or 'unknown yet'}>"
+        return f"<Field Type: {self.field_type or 'Unknown'}>"
 
     __repr__ = __str__
