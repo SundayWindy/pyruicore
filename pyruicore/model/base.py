@@ -14,7 +14,7 @@ class BaseModel(metaclass=ModelMetaClass):
         for field_name, field in self.__fields_map__.items():
             input_value = kwargs.get(field_name)
             value = field.get_value(input_value)
-            if not drop_missing and not field.nullable and not value:
+            if not drop_missing and not field.nullable and value is None:
                 raise Exception(f"{type(self)}: field <{field_name}> must be initialized")
             setattr(self, field_name, field.parse(f"{class_name}.{field_name}", value))
 
