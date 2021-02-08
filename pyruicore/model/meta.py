@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from pyruicore.data_type import TYPE_MAPPING, ListType, UserDefineType, analysis_annotation
+from pyruicore.data_type import TYPE_MAPPING, AnyType, ListType, UserDefineType, analysis_annotation
 from pyruicore.field import Field
 
 
@@ -58,6 +58,8 @@ def is_model_type(field_type: Any):
 
 def init_field_type(user_field_type, user_ele_type):
     """ init `field_type` for `Field`"""
+    if user_field_type is Any:
+        return AnyType()
     if is_model_type(user_field_type):
         return init_model_type(user_field_type)
 

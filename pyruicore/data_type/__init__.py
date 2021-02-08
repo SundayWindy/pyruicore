@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pyruicore.data_type.analysis import analysis_annotation
 from pyruicore.data_type.basic import (
+    AnyType,
     BaseType,
     BooleanType,
     DateTimeType,
@@ -30,5 +31,6 @@ __all__ = [
     "ListType",
     "TYPE_MAPPING",
     "UserDefineType",
+    "AnyType",
     "analysis_annotation",
 ]

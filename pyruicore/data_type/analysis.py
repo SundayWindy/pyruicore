@@ -52,6 +52,8 @@ def analysis_annotation(type_hint: Any) -> Tuple[bool, Any, Any]:
 
     origin, args = get_origin(type_hint), get_args(type_hint)
 
+    if origin is None and not args:
+        return False, Any, None
     if is_origin_type(origin):
         check_args(args, error=f"类型 {origin} 下不支持")
         return False, origin, args[0]
