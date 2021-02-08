@@ -37,7 +37,7 @@ class IntType(BaseType):
             raise TypeError(f"{field} expect <class 'int'>, but get {type(value)}")
 
     def marshal(self, value) -> Optional[int]:
-        return int(value) if value else None
+        return int(value) if value is not None else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -58,7 +58,7 @@ class FloatType(BaseType):
             raise TypeError(f"{field} expect <class 'float'>, but get {type(value)}")
 
     def marshal(self, value) -> Optional[float]:
-        return float(value) if value else None
+        return float(value) if value is not None else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -79,7 +79,7 @@ class StringType(BaseType):
             raise TypeError(f"{field} expect <class 'str'>, but get {type(value)}")
 
     def marshal(self, value) -> Optional[str]:
-        return str(value) if value else None
+        return str(value) if value is not None else None
 
     def validate(self, value) -> None:
         assert value is None or isinstance(
@@ -118,9 +118,7 @@ class DateTimeType(BaseType):
             elif isinstance(value, str):
                 return str_to_datetime(value)
 
-        raise ValueError(
-            f"{field} expect datetime, but get{value},Invalid datetime type"
-        )
+        raise ValueError(f"{field} expect datetime, but get{value},Invalid datetime type")
 
     def marshal(self, value):
         if isinstance(value, datetime):
@@ -147,9 +145,7 @@ class ListType(BaseType):
 
     def parse(self, field, value) -> List[Any]:
         try:
-            return (
-                [] if not value else [self.element_type.parse(field, v) for v in value]
-            )
+            return [] if not value else [self.element_type.parse(field, v) for v in value]
         except TypeError as e:
             raise e
 

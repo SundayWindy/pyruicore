@@ -1,6 +1,3 @@
-"""
-all basic type
-"""
 from datetime import datetime
 
 from pyruicore.data_type.analysis import analysis_annotation
